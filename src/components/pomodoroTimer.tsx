@@ -1,7 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import useInterval from "../hooks/useInterval";
 import Button from "./button";
 import Timer from "./timer";
+
+const bellStart = require("../sounds/bell-start.mp3");
+const bellFinish = require("../sounds/bell-finish.mp3");
+
+const audioStartWorking = new Audio(bellStart);
+const audioStopWorking = new Audio(bellFinish);
 
 interface PomodoroProps {
   pomodoroTime: number;
@@ -33,6 +40,7 @@ export default function Pomodoro(props: PomodoroProps): JSX.Element {
     setWorking(true);
     setResting(false);
     setMainTime(props.pomodoroTime);
+    // audioStartWorking.play();
   };
 
   const configureRest = (long: boolean) => {
