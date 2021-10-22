@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import useInterval from "../hooks/useInterval";
 import Button from "./button";
 import Timer from "./timer";
@@ -32,29 +32,33 @@ export default function Pomodoro(props: PomodoroProps): JSX.Element {
   useInterval(
     () => {
       setMainTime(mainTime - 1);
+      if (working) setFullWorkingTime(fullWorkingTime + 1);
     },
     timeCounting ? 1000 : null
   );
 
-  const configureWork = () => {
+  const configureWork = useCallback(() => {
     setTimeCounting(true);
     setWorking(true);
     setResting(false);
     setMainTime(props.pomodoroTime);
     // audioStartWorking.play();
-  };
+  }, [setTimeCounting, setWorking, setResting, setMainTime, props.pomodoroTime]);
 
-  const configureRest = (long: boolean) => {
-    setTimeCounting(true);
-    setWorking(false);
-    setResting(true);
+  const configureRest = useCallback(
+    (long: boolean) => {
+      setTimeCounting(true);
+      setWorking(false);
+      setResting(true);
 
-    if (long) {
-      setMainTime(props.longRestTime);
-    } else {
-      setMainTime(props.shortRestTime);
-    }
-  };
+      if (long) {
+        setMainTime(props.longRestTime);
+      } else {
+        setMainTime(props.shortRestTime);
+      }
+    },
+    [setTimeCounting, setWorking, setResting, setMainTime, props.longRestTime, props.shortRestTime]
+  );
 
   useEffect(() => {
     if (working) document.body.classList.add("working");
@@ -88,7 +92,7 @@ export default function Pomodoro(props: PomodoroProps): JSX.Element {
 
   return (
     <div className="pomodoro">
-      <h2>You are: working</h2>
+      <h2>You are: {working ? "working" : "resting"} </h2>
       <Timer mainTime={mainTime} />
 
       <div className="controls">
