@@ -3,6 +3,7 @@ import React, { useEffect, useCallback } from "react";
 import useInterval from "../hooks/useInterval";
 import Button from "./button";
 import Timer from "./timer";
+import secondsToMinutes from "../utils/secondsToMinutes";
 import secondsToTime from "../utils/secondsToTime";
 
 const bellStart = require("../sounds/bell-start.mp3");
